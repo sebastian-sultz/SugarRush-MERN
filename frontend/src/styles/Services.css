@@ -1,0 +1,48 @@
+// src/components/Services.jsx
+import React from 'react';
+import { FaMugHot } from 'react-icons/fa'; // Font Awesome coffee mug with vapor/steam
+import './styles/Services.css'; // Import the custom CSS
+
+const Services = () => {
+  const services = [
+    { name: 'Espresso', description: 'Bold Elegance In Every Sip', iconColor: 'text-yellow-600', hoverBgColor: '#D4A762' },
+    { name: 'Americano', description: 'Unwind With Simplicity', iconColor: 'text-yellow-600', hoverBgColor: '#D4A762' },
+    { name: 'Latte', description: 'Indulge In Creamy Comfort', iconColor: 'text-black', hoverBgColor: '#000000' },
+    { name: 'Mocha', description: 'Chocolate Infusion', iconColor: 'text-yellow-600', hoverBgColor: '#D4A762' },
+    { name: 'Cold Brew', description: 'Stepped To Perfection', iconColor: 'text-yellow-600', hoverBgColor: '#D4A762' },
+    { name: 'Cappuccino', description: 'A Symphony Of Foam And Bliss', iconColor: 'text-yellow-600', hoverBgColor: '#D4A762' },
+    { name: 'Affogato', description: 'Drowning In Decadence, Resurfacing In Delight', iconColor: 'text-yellow-600', hoverBgColor: '#D4A762' },
+    { name: 'Hot Chocolate', description: 'Where Warmth Meets Taste', iconColor: 'text-yellow-600', hoverBgColor: '#D4A762' },
+  ];
+
+  return (
+    <div className="py-24 bg-beige-100">
+      <div className="container mx-auto">
+        <div className="text-center">
+          <span className="inline-block font-open-sans font-bold text-primary-600 text-sm bg-beige-100 border border-primary-600 rounded-full px-4 py-1 mb-3">
+            Our Services
+          </span>
+          <h1 className="text-4xl font-playball mb-8">What We Offer</h1>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {services.map((service, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-lg shadow-md p-6 text-center relative service-card"
+              style={{ position: 'relative' }}
+            >
+              <div className="icon-container relative h-24 mb-6 flex items-center justify-center">
+                <FaMugHot className={`text-7xl ${service.iconColor} transition-colors duration-2000`} />
+                <div className={`absolute top-0 left-0 w-full h-0 bg-[${service.hoverBgColor}] transition-all duration-2000 ease-in-out hover:h-full z-[-1]`}></div>
+              </div>
+              <h4 className="text-xl font-open-sans font-semibold mb-3 text-gray-900">{service.name}</h4>
+              <p className="text-gray-500">{service.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Services;
