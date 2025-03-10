@@ -1,18 +1,17 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Spinner from './Spinner';
 import { BASE_URL } from '../constants/constants';
 import { useUser } from '../UserContext';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { addToCart } from '../utils/api';
-import { FaMugHot } from 'react-icons/fa';
+import { FaMugHot, FaCheck } from 'react-icons/fa'; // Added FaCheck for a checkmark icon
 
 const Services = () => {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [addedItems, setAddedItems] = useState({}); // Tracks which items are added
   const { loggedInUser, token, updateCartCount } = useUser();
   const navigate = useNavigate();
 
@@ -33,17 +32,21 @@ const Services = () => {
 
   const handleAddToCart = async (watchId) => {
     if (!loggedInUser) {
-      toast.error('Please log in to add items to your cart.');
       navigate('/login');
       return;
     }
 
     try {
       await addToCart(watchId, token);
-      toast.success('Item added to cart!');
-      updateCartCount(1);
+      updateCartCount(1); // Update cart count in context
+
+      // Mark item as added and reset after 2 seconds
+      setAddedItems((prev) => ({ ...prev, [watchId]: true }));
+      setTimeout(() => {
+        setAddedItems((prev) => ({ ...prev, [watchId]: false }));
+      }, 2000); // Reset after 2 seconds
     } catch (error) {
-      toast.error('Failed to add item to cart.');
+      console.error('Failed to add item to cart:', error);
     }
   };
 
@@ -82,15 +85,25 @@ const Services = () => {
                   <div className="mt-auto w-full flex justify-between items-center px-2">
                     {/* Price on the Left */}
                     <span className="text-lg font-semibold text-yellow-700 group-hover:text-white transition-all duration-500">
-                    ₹{service.price}
+                      ₹{service.price}
                     </span>
 
-                    {/* Add to Cart Button on the Right */}
+                    {/* Add to Cart Button on the Right with Added State */}
                     <button
                       onClick={() => handleAddToCart(service._id)}
-                      className="bg-gradient-to-r from-yellow-600 to-yellow-800 text-white text-sm font-medium px-4 py-2 rounded-full shadow-md hover:shadow-lg transition-all duration-300 ease-in-out group-hover:bg-white hover:scale-105"
+                      className={`relative text-sm font-medium px-4 py-2 rounded-full shadow-md transition-all duration-300 ease-in-out group-hover:shadow-lg hover:scale-105 ${
+                        addedItems[service._id]
+                          ? 'bg-green-600 text-white'
+                          : 'bg-gradient-to-r from-yellow-600 to-yellow-800 text-white group-hover:bg-white group-hover:text-yellow-800'
+                      }`}
                     >
-                      Buy Now!
+                      {addedItems[service._id] ? (
+                        <span className="flex items-center">
+                          <FaCheck className="mr-1" /> Added
+                        </span>
+                      ) : (
+                        'Buy Now!'
+                      )}
                     </button>
                   </div>
                 </div>

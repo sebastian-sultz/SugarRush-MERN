@@ -46,7 +46,7 @@ export default function Navbar() {
       <div className="container mx-auto">
         <nav className="flex items-center justify-between py-4">
           {/* Logo */}<h1><button onClick={handleHomeClick} className="text-3xl font-playball text-primary-600">
-                Golden<span className="text-gray-900">Hour</span>
+                Sugar<span className="text-gray-900">Rush</span>
               </button></h1>
 
           {/* Toggle Button for Mobile */}
